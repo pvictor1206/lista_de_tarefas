@@ -1,49 +1,51 @@
-import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomeState extends State<Home> {
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  List _toDoList = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    return Container();
   }
+
+  // Obter o arquivo
+  Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
+  }
+
+  // Salvar um dado no arquivo
+  Future<File> _saveData() async {
+    String data = json.encode(_toDoList);
+
+    final file = await _getFile();
+    return file.writeAsString(data);
+  }
+
+  // ler os dados no arquivo
+  Future<String> _readData() async {
+   try{
+     final file = await _getFile();
+
+     return file.readAsString();
+   } catch (e) {
+     return null;
+   }
+  }
+
 }
+

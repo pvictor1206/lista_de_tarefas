@@ -7,7 +7,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lista de tarefas',
-      home: MyHomePage(title: 'Flutter Demo Home Page'), //Tela principal
+      home: Home(), //Tela principal
     );
   }
 }
