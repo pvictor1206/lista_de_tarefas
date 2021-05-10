@@ -45,6 +45,23 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<Null> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+
+    setState(() {
+      _toDoList.sort((a, b){
+        if(a["ok"] && !b["ok"]) return 1;
+        else if(!a["ok"] && b["ok"]) return -1;
+        else return 0;
+      });
+
+      _saveData();
+
+    });
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +74,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
             child: Row(
@@ -79,14 +96,16 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.only(top: 10.0),
-                  itemCount: _toDoList.length,
-                  itemBuilder: buildItem
-              )
+              child: RefreshIndicator( onRefresh: _refresh,
+                child: ListView.builder(
+    padding: EdgeInsets.only(top: 10.0),
+    itemCount: _toDoList.length,
+    itemBuilder: buildItem,
+              ),
           )
-        ],
-      ),
+    ),
+      ],
+    ),
     );
   }
 
