@@ -2,9 +2,9 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -80,30 +80,49 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 10.0),
                   itemCount: _toDoList.length,
-                  itemBuilder: (context, index){
-                  return CheckboxListTile(
-                    title: Text(_toDoList[index]["title"],
-                    style: TextStyle(color: Colors.black),
-                    ),
-                    value: _toDoList[index]["ok"],
-                    secondary: CircleAvatar(
-                      child: Icon(_toDoList[index]["ok"] ?
-                          Icons.check : Icons.error
-                      ) ,
-                    ),
-                    onChanged: (c){
-                      setState(() {
-                        _toDoList[index]["ok"] = c;
-                        _saveData();
-                      });
-                    },
-                  );
-                  }
+                  itemBuilder: buildItem
               )
           )
         ],
       ),
     );
+  }
+
+  // Fazer cada um dos itens da lista
+  Widget buildItem(context, index){
+    // Arrasta o item para direita
+    return Dismissible(
+      key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.9,0.0),
+          child: Icon(Icons.delete,
+            color: Colors.white,
+          ),
+        ),
+      ),
+        direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_toDoList[index]["title"],
+          style: TextStyle(color: Colors.black),
+        ),
+        value: _toDoList[index]["ok"],
+        secondary: CircleAvatar(
+          child: Icon(_toDoList[index]["ok"] ?
+          Icons.check : Icons.error
+          ) ,
+        ),
+        onChanged: (c){
+          setState(() {
+            _toDoList[index]["ok"] = c;
+            _saveData();
+          });
+        },
+      )
+      ,
+    );
+
   }
 
   // Obter o arquivo
@@ -132,4 +151,5 @@ class _HomeState extends State<Home> {
   }
 
 }
+
 
