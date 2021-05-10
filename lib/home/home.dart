@@ -15,11 +15,62 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List _toDoList = [];
+  List _toDoList = ["Paulo","Victor","Santos","Magalhães"];
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("Lista de Tarefas do Paulinho :3", style: TextStyle(
+          color: Colors.black
+        ),),
+        backgroundColor: Colors.lightBlueAccent,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
+            child: Row(
+              children: <Widget>[
+               Expanded(child:  TextField(
+                 decoration: InputDecoration(
+                     labelText: "Nova Tarefa",
+                     labelStyle: TextStyle(color: Colors.lightBlueAccent)
+                 ),
+               )),
+                RaisedButton(
+                  color: Colors.lightBlueAccent,
+                    child: Text("ADD"),
+                    textColor: Colors.white,
+                    onPressed: (){},
+                )
+              ],
+            ),
+          ),
+          Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.only(top: 10.0),
+                  itemCount: _toDoList.length,
+                  itemBuilder: (context, index){
+                  return CheckboxListTile(
+                    title: Text(_toDoList[index]["title"],
+                    style: TextStyle(color: Colors.lightBlueAccent),
+                    ),
+                    value: _toDoList[index]["ok"],
+                    secondary: CircleAvatar(
+                      child: Icon(_toDoList[index]["ok"] ?
+                          Icons.check : Icons.error
+                      ) ,
+                    ),
+                  );
+                  }
+              )
+          )
+        ],
+      ),
+    );
   }
 
   // Obter o arquivo
