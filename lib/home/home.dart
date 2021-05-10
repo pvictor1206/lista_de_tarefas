@@ -15,12 +15,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List _toDoList = ["Paulo","Victor","Santos","Magalhães"];
+  final _toDoController = TextEditingController();
+
+  List _toDoList = [];
+
+  void _addToDo() {
+    // Atualizar o estado da tela
+    setState(() {
+      Map<String, dynamic> newToDo = Map();
+      newToDo["title"] = _toDoController.text;
+      _toDoController.text = "";
+      newToDo["ok"] = false;
+      _toDoList.add(newToDo);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.lightBlue,
       appBar: AppBar(
         title: Text("Lista de Tarefas do Paulinho :3", style: TextStyle(
           color: Colors.black
@@ -35,16 +48,17 @@ class _HomeState extends State<Home> {
             child: Row(
               children: <Widget>[
                Expanded(child:  TextField(
+                 controller: _toDoController,
                  decoration: InputDecoration(
                      labelText: "Nova Tarefa",
-                     labelStyle: TextStyle(color: Colors.lightBlueAccent)
+                     labelStyle: TextStyle(color: Colors.black)
                  ),
                )),
                 RaisedButton(
                   color: Colors.lightBlueAccent,
-                    child: Text("ADD"),
-                    textColor: Colors.white,
-                    onPressed: (){},
+                    child: Text("Adicinar"),
+                    textColor: Colors.black,
+                    onPressed: _addToDo,
                 )
               ],
             ),
@@ -56,7 +70,7 @@ class _HomeState extends State<Home> {
                   itemBuilder: (context, index){
                   return CheckboxListTile(
                     title: Text(_toDoList[index]["title"],
-                    style: TextStyle(color: Colors.lightBlueAccent),
+                    style: TextStyle(color: Colors.black),
                     ),
                     value: _toDoList[index]["ok"],
                     secondary: CircleAvatar(
@@ -64,6 +78,11 @@ class _HomeState extends State<Home> {
                           Icons.check : Icons.error
                       ) ,
                     ),
+                    onChanged: (c){
+                      setState(() {
+                        _toDoList[index]["ok"] = c;
+                      });
+                    },
                   );
                   }
               )
