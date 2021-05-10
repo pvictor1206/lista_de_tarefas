@@ -19,6 +19,18 @@ class _HomeState extends State<Home> {
 
   List _toDoList = [];
 
+
+  @override
+  void initState() {
+    super.initState();
+    
+    _readData().then((data) {
+      setState(() {
+        _toDoList = json.decode(data);
+      });
+    });
+  }
+
   void _addToDo() {
     // Atualizar o estado da tela
     setState(() {
@@ -27,6 +39,7 @@ class _HomeState extends State<Home> {
       _toDoController.text = "";
       newToDo["ok"] = false;
       _toDoList.add(newToDo);
+      _saveData();
     });
   }
 
@@ -51,7 +64,7 @@ class _HomeState extends State<Home> {
                  controller: _toDoController,
                  decoration: InputDecoration(
                      labelText: "Nova Tarefa",
-                     labelStyle: TextStyle(color: Colors.black)
+                     labelStyle: TextStyle(color: Colors.deepPurple)
                  ),
                )),
                 RaisedButton(
@@ -81,6 +94,7 @@ class _HomeState extends State<Home> {
                     onChanged: (c){
                       setState(() {
                         _toDoList[index]["ok"] = c;
+                        _saveData();
                       });
                     },
                   );
